@@ -16,7 +16,7 @@ num_of_units = 256
 
 # Use GridSearchCV to look up optimal parameters - Separate from actual training; takes a long time.
 # True/False: Run hyper-parameter search via GridSearchCV. 
-hyper_parameter_search = False      
+hyper_parameter_search = True      
 
 # For echo operating system parameters
 os = platform.platform()

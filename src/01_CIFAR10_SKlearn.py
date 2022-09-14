@@ -4,7 +4,7 @@ import time
 import os
 
 import matplotlib.pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 
 from keras.datasets import cifar10
 
@@ -180,15 +180,20 @@ end_time = time.time() - start_time
 log_training_results("\t[Test-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score, end_time))  
 
 # # Hyperparameter search -- Takes up a long time.
+# 960 Fits for all params, takes 2 days lol
+# 240 Fits for reduced params, takes roughly 8 hours
+# From previous assignment, we know that relu and adam did best
 if config.hyper_parameter_search:
     mlp = MLPClassifier()
     parameters = {
-        'hidden_layer_sizes': [(64,),(128,),(256),(32,32)],
-        'max_iter': [5, 10, 15, 20],
-        'batch_size': [16, 32, 64],
-        'activation': ['tanh', 'relu'],
-        'solver': ['sgd', 'adam'],
-        'alpha': [0.01, 0.001, 0.0001],
+        'hidden_layer_sizes': [(64,),(128,),(256,)],
+        'max_iter': [10, 20],
+        'batch_size': [64, 128],
+        #'activation': ['tanh', 'relu'],
+        'activation': ['relu'],
+        #'solver': ['sgd', 'adam'],
+        'solver': ['adam'],
+        'alpha': [0.001, 0.0001],
         'learning_rate': ['constant','adaptive'],
     }
 
