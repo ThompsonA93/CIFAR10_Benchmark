@@ -2,25 +2,26 @@
 from datetime import datetime
 import time
 import os
-
 import matplotlib.pyplot as plt
-# %matplotlib inline
+%matplotlib inline
 
+# Dataset
 from keras.datasets import cifar10
 
+# Subroutines
 from sklearn.model_selection import GridSearchCV
 from sklearn.decomposition import PCA
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report
 
+# Additional configurations, @see config.py
 import config
 
-### Configurations
-# Training-Size
+# Training-Sizes
 num_train = config.num_train
 num_test  = config.num_test
 
-# Simple function to log information
+# Simple functions to log information
 path = os.getcwd()+"/log"
 logDir = os.path.exists(path)
 if not logDir:
@@ -45,17 +46,16 @@ log_training_results("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.
 if config.hyper_parameter_search:
     log_hyperparameter_search("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
 
-# Fetch MNIST-Data from Keras repository
+
+# Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
-# Display (Train) (Test) datasets
+
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
 print("Shape of training labels:\t", y_train.shape)
 print("Shape of testing data:\t\t", X_test.shape)
 print("Shape of testing labels:\t", y_test.shape)
-
-# i.e.: We have 60000 images with a size of 28x28 pixels
 
 # Visualize some examples
 cols=8
@@ -71,7 +71,6 @@ for i in range(rows):
         index += 1
 plt.show()
 
-# Assign new variable
 train_data = X_train
 train_label = y_train
 test_data = X_test
@@ -79,12 +78,11 @@ test_label = y_test
 
 # Reshape the data such that we have access to every pixel of the image
 # The reason to access every pixel is that only then we can apply deep learning ideas and can assign color code to every pixel.
-
 # https://datascience.stackexchange.com/questions/24459/how-to-give-cifar-10-as-an-input-to-mlp
-train_data = X_train.reshape(X_train.shape[0], 32*32*3)
-#train_label = y_train.astype("float32")
-test_data = X_test.reshape(X_test.shape[0], 32*32*3)
-#test_label = y_test.astype("float32")
+train_data = X_train.reshape(X_train.shape[0], 32*32*3).astype('float32')
+train_label = y_train.astype("float32")
+test_data = X_test.reshape(X_test.shape[0], 32*32*3).astype('float32')
+test_label = y_test.astype("float32")
 
 # We know the RGB color code where different values produce various colors. It is also difficult to remember every color combination. 
 # We already know that each pixel has its unique color code and also we know that it has a maximum value of 255. 
@@ -99,17 +97,12 @@ train_label = train_label[1:num_train]
 test_data = test_data[1:num_test]
 test_label = test_label[1:num_test]
 
-# Display (Train) (Test) datasets
 print("\t\t\t\t (Sets,  X*Y*RGB)")
 print("Reshaped training data:\t\t", train_data.shape)
 print("Reshaped training labels:\t", train_label.shape)
 print("Reshaped testing data:\t\t", test_data.shape)
 print("Reshaped testing labels:\t", test_label.shape)
 
-# As we can see: We now have X images with 784 pixels in total
-# We now operate on this data
-
-# The default layout of mlp() 
 # @see https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html
 mlp = MLPClassifier(
     hidden_layer_sizes=(100,),      # The ith element represents the number of neurons in the ith hidden layer.
@@ -137,10 +130,7 @@ mlp = MLPClassifier(
     max_fun=15000                   # Only used when solver=’lbfgs’. Maximum number of loss function calls. 
 )
 
-# Fit the model to data matrix X and target(s) y.
-#   X ... ndarray or sparse matrix of shape (n_samples, n_features), the input data
-#   y ... ndarray of shape (n_samples,) or (n_samples, n_outputs), the target values (class labels in classification, real numbers in regression)
-
+# Set up the multi-layer perceptron classifier.
 mlp = MLPClassifier(
     batch_size=config.batch_size,
     max_iter=config.num_epochs,
@@ -148,6 +138,8 @@ mlp = MLPClassifier(
 )
 
 start_time = time.time()
+#   train_data ... ndarray or sparse matrix of shape (n_samples, n_features), the input data
+#   train_label ... ndarray of shape (n_samples,) or (n_samples, n_outputs), the target values (class labels in classification, real numbers in regression)
 mlp.fit(train_data, train_label)
 end_time = time.time() - start_time
 
@@ -155,9 +147,8 @@ params = {"MLP":{'batch_size':mlp.get_params()["batch_size"], 'num_epochs':mlp.g
 log_training_results("Trained new model: %s in %s seconds" % (params, end_time))
 
 # Predict using the multi-layer perceptron classifier.
-#   X ... {array-like, sparse matrix} of shape (n_samples, n_features)
-
 start_time = time.time()
+#   train_data ... {array-like, sparse matrix} of shape (n_samples, n_features)
 predictions = mlp.predict(train_data)
 end_time = time.time() - start_time
 log_training_results("\tPredicting train data -- execution time: %ss" % (end_time))
@@ -179,7 +170,7 @@ score = mlp.score(test_data, test_label)
 end_time = time.time() - start_time
 log_training_results("\t[Test-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score, end_time))  
 
-# # Hyperparameter search -- Takes up a long time.
+# # # Hyperparameter search -- Takes up a long time.
 # 960 Fits for all params, takes 2 days lol
 # 240 Fits for reduced params, takes roughly 8 hours
 # From previous assignment, we know that relu and adam did best
