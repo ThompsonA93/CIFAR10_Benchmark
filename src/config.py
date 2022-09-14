@@ -13,10 +13,13 @@ num_test  = 2500
 batch_size = 32
 num_epochs = 5
 num_of_units = 256
+num_classes = 10
 
 # Use GridSearchCV to look up optimal parameters - Separate from actual training; takes a long time.
-# True/False: Run hyper-parameter search via GridSearchCV. 
-hyper_parameter_search = True      
+# True/False: Run hyper-parameter search via Keras-Tuner. 
+hyper_parameter_search = True
+max_epochs = 5      # Tests within testing sets
+max_trials = 5      # Complete testing sets
 
 # For echo operating system parameters
 os = platform.platform()

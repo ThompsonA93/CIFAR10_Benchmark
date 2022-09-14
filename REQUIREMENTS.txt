@@ -2,3 +2,4 @@ numpy
 keras 
 tensorflow 
 sklearn
+keras-tuner
