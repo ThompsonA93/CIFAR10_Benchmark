@@ -11,14 +11,14 @@ num_classes = 10
 
 # Set parameters for CNN-Training
 batch_size = 32
-num_epochs = 5
+num_epochs = 10
 num_of_units = 256
 
 # True/False: Run hyper-parameter search via Keras-Tuner or GridSearchCV
 # NOTE: Takes ~8 hours for GridSearch and ~4 hours for Hyperband. Adjust variables as needed
 hyper_parameter_search = True
 # Keras-Tuner-only configurations
-hps_max_epochs = 20
+hps_max_epochs = 25
 
 # For echo operating system parameters
 os = platform.platform()
