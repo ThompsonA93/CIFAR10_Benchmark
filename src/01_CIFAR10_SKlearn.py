@@ -3,7 +3,7 @@ from datetime import datetime
 import time
 import os
 import matplotlib.pyplot as plt
-%matplotlib inline
+#%matplotlib inline
 
 # Dataset
 from keras.datasets import cifar10

@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 import os
 import sys
-%matplotlib inline
+#%matplotlib inline
 
 # Dataset
 from keras.datasets import cifar10

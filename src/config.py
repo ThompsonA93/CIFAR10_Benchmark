@@ -15,10 +15,10 @@ num_epochs = 5
 num_of_units = 256
 
 # True/False: Run hyper-parameter search via Keras-Tuner or GridSearchCV
+# NOTE: Takes ~8 hours for GridSearch and ~4 hours for Hyperband. Adjust variables as needed
 hyper_parameter_search = True
 # Keras-Tuner-only configurations
-hps_max_epochs = 20      # Tests within testing sets
-hps_max_trials = 20      # Complete testing sets
+hps_max_epochs = 20
 
 # For echo operating system parameters
 os = platform.platform()
