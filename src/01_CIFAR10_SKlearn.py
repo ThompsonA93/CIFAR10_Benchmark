@@ -3,7 +3,6 @@ from datetime import datetime
 import time
 import os
 import matplotlib.pyplot as plt
-#%matplotlib inline
 
 # Dataset
 from keras.datasets import cifar10
@@ -46,10 +45,8 @@ log_training_results("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.
 if config.hyper_parameter_search:
     log_hyperparameter_search("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
 
-
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-
 
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
@@ -70,6 +67,7 @@ for i in range(rows):
         ax[i,j].axis('off')
         index += 1
 plt.show()
+
 
 train_data = X_train
 train_label = y_train
@@ -130,7 +128,7 @@ mlp = MLPClassifier(
     max_fun=15000                   # Only used when solver=’lbfgs’. Maximum number of loss function calls. 
 )
 
-# Set up the multi-layer perceptron classifier.
+# Set up the multi-layer perceptron classifier and fit to datasets.
 mlp = MLPClassifier(
     batch_size=config.batch_size,
     max_iter=config.num_epochs,
@@ -160,6 +158,7 @@ end_time = time.time() - start_time
 log_training_results("\tPredicting test data -- execution time: %ss" % (end_time))
 
 
+# Analyze results
 start_time = time.time()
 score = mlp.score(train_data, train_label)
 end_time = time.time() - start_time
@@ -212,3 +211,4 @@ if config.hyper_parameter_search:
     y_true, y_pred = test_label, grid.predict(test_data)
     log_hyperparameter_search(classification_report(y_true, y_pred))
     print()
+

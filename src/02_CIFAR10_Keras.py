@@ -6,7 +6,6 @@ import os
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 # https://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
 SMALL_SIZE = 16
@@ -38,14 +37,13 @@ import config
 num_train = config.num_train                   # 60000 for full data set 
 num_test  = config.num_test                    # 10000 for full data set
 
-
 # Simple functions to log information
 path = os.getcwd()+"/log"
 logDir = os.path.exists(path)
 if not logDir:
     os.makedirs(path)
 
-plots = os.getcwd()+"/plots"
+plots = os.getcwd()+"/log/plots"
 logDir = os.path.exists(plots)
 if not logDir:
     os.makedirs(plots)
@@ -71,11 +69,8 @@ log_training_results("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.
 if config.hyper_parameter_search:
     log_hyperparameter_search("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
 
-
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
-
-
 
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
@@ -96,7 +91,7 @@ for i in range(rows):
         ax[i,j].axis('off')
         index += 1
 plt.show()
-fig.savefig('plots/cifar10_examples.png')
+fig.savefig(plots+'/cifar10_examples.png')
 
 
 train_data = X_train
@@ -117,7 +112,7 @@ test_label = y_test.astype("float32")
 train_data = train_data / 255
 test_data = test_data / 255
 
-# Force the amount of columns to fit the necessary sizes required by the neural network
+# Categorize the labels by conversion from integers to a class matrix
 train_label = keras.utils.to_categorical(train_label, config.num_classes)
 test_label = keras.utils.to_categorical(test_label, config.num_classes)
 
@@ -169,7 +164,7 @@ model.summary()
 
 # Train model
 start_time = time.time()
-model.fit(
+history = model.fit(
     x=train_data, 
     y=train_label, 
     batch_size=config.batch_size, 
@@ -178,8 +173,18 @@ model.fit(
     validation_data=(test_data, test_label))
 end_time = time.time() - start_time
 
-params = {"Keras":{}}
+params = {"Keras":{"batch_size":config.batch_size, "epochs":config.num_epochs}}
 log_training_results("Trained new model: %s in %s seconds" % (params, end_time))
+
+fig = plt.figure()
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model Accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Training', 'Validation'], loc='upper left')
+plt.show()
+fig.savefig(plots+'/training_history_standard.png')
 
 # Evaluate model based on supplied tags
 start_time = time.time()
@@ -208,9 +213,9 @@ fig, ax = plt.subplots(figsize=(16,8))
 ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
-ax.set_title('CIFAR-10-Keras Confusion Matrix of standard NN')
-fig.savefig('plots/ConfusionMatrix_standard.png')
-
+ax.set_title('CIFAR-10 Keras Confusion Matrix of standard NN')
+plt.show()
+fig.savefig(plots+'/ConfusionMatrix_standard.png')
 
 if not config.hyper_parameter_search:
     print("Terminating without hyperparameter search.")
@@ -261,28 +266,19 @@ def model_builder(hp):
     #model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
-    #optimizer = keras.optimizers.Adam(learning_rate=hp_learning_rate)
-
-    #model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-
-    #model.compile(
-    #    optimizer=keras.optimizers.Adam(learning_rate=hp_learning_rate),
-    #    loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-    #    metrics=['accuracy']
-    #)
     return model
 
-tuner = kt.Hyperband(
+tuner = kt.RandomSearch(
     model_builder,
     objective='val_accuracy',
-    max_epochs=config.hps_max_epochs,
-    factor=3,                    
-    directory='log',
-    project_name='keras-hyperparameter-search'
+    #max_epochs=config.max_trials,
+    #factor=3,                    
+    directory='log/hps',
+    project_name='keras-hyperparameter-search-RandomSearch'
 )
 
-stop_early = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5)
-
+stop_early = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=3, verbose=1)
+csvlogger = keras.callbacks.CSVLogger(hyperparameter_search_log, separator=",", append=True)
 tuner.search(
     train_data,
     train_label,
@@ -291,17 +287,120 @@ tuner.search(
     callbacks=[stop_early]
 )
 
-log_hyperparameter_search("--- [%s] Running Parameter-Tests [SKLEARN-NN] ---" % datetime.now())
-best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
-log_hyperparameter_search("\tBest parameters set found on following development set:", best_hps.values)
+log_hyperparameter_search("--- [%s] Running Parameter-Tests [Keras-RandomSearch] ---" % datetime.now())
+best_hps_rs = tuner.get_best_hyperparameters(num_trials=1)[0]
+log_hyperparameter_search("\tBest parameters set found on following development set: %s" % best_hps_rs.values)
 
-#log_hyperparameter_search("\t\tAccuracy: %s" % best_hps.get('val_accuracy'))
-#log_hyperparameter_search("\t\tLayer-Units: %s" % best_hps.get('units'))
-#log_hyperparameter_search("\t\tLearning Rate: %s" % best_hps.get('learning_rate'))
+best_hps_rs_results = tuner.results_summary(num_trials=1)
 
-model = tuner.hypermodel.build(best_hps)
-history = model.fit(train_data, train_label, epochs=config.num_epochs, validation_split=0.2)
+best_hps_rs_model = tuner.get_best_models(num_models=1)[0]
+rs_test_loss, rs_test_acc = best_hps_rs_model.evaluate(test_data, test_label)
+log_hyperparameter_search("\tPredicting test data --  execution time: %ss" % (end_time))
+log_hyperparameter_search("\tAccuracy: %s; Loss: %s" % (rs_test_loss, rs_test_acc))  
 
+tuner = kt.BayesianOptimization(
+    model_builder,
+    objective='val_accuracy',
+    max_trials=config.hps_max_trials,
+    #factor=3,                    
+    directory='log/hps',
+    project_name='keras-hyperparameter-search-BayesianOptimization'
+)
+
+stop_early = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=3, verbose=1)
+csvlogger = keras.callbacks.CSVLogger(hyperparameter_search_log, separator=",", append=True)
+tuner.search(
+    train_data,
+    train_label,
+    epochs=config.hps_max_epochs,
+    validation_split=0.2,
+    callbacks=[stop_early]
+)
+
+log_hyperparameter_search("--- [%s] Running Parameter-Tests [Keras-BayesianOptimization] ---" % datetime.now())
+best_hps_bo = tuner.get_best_hyperparameters(num_trials=1)[0]
+log_hyperparameter_search("\tBest parameters set found on following development set: %s" % best_hps_bo.values)
+
+best_hps_bo_results = tuner.results_summary(num_trials=1)
+
+best_hps_bo_model = tuner.get_best_models(num_models=1)[0]
+bo_test_loss, bo_test_acc = best_hps_bo_model.evaluate(test_data, test_label)
+log_hyperparameter_search("\tPredicting test data --  execution time: %ss" % (end_time))
+log_hyperparameter_search("\tAccuracy: %s; Loss: %s" % (bo_test_loss, bo_test_acc))  
+
+tuner = kt.Hyperband(
+    model_builder,
+    objective='val_accuracy',
+    max_epochs=config.hps_max_trials,
+    factor=3,                    
+    directory='log/hps',
+    project_name='keras-hyperparameter-search-Hyperband'
+)
+
+stop_early = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=3, verbose=1)
+csvlogger = keras.callbacks.CSVLogger(hyperparameter_search_log, separator=",", append=True)
+tuner.search(
+    train_data,
+    train_label,
+    epochs=config.hps_max_epochs,
+    validation_split=0.2,
+    callbacks=[stop_early]
+)
+
+log_hyperparameter_search("--- [%s] Running Parameter-Tests [Keras-Hyperband] ---" % datetime.now())
+best_hps_hb = tuner.get_best_hyperparameters(num_trials=1)[0]
+log_hyperparameter_search("\tBest parameters set found on following development set: %s" % best_hps_hb.values)
+
+best_hps_hb_results = tuner.results_summary(num_trials=1)
+
+best_hps_hb_model = tuner.get_best_models(num_models=1)[0]
+hb_test_loss, hb_test_acc = best_hps_hb_model.evaluate(test_data, test_label)
+log_hyperparameter_search("\tPredicting test data --  execution time: %ss" % (end_time))
+log_hyperparameter_search("\tAccuracy: %s; Loss: %s" % (hb_test_loss, hb_test_acc))  
+
+
+# Map and print the scores
+accuracy_score = {"RandomSearch": rs_test_acc, "BayesianOptimization": bo_test_acc, "HyperBand": hb_test_acc}
+loss_score = {"RandomSearch": rs_test_loss, "BayesianOptimization": bo_test_loss, "HyperBand": hb_test_loss}
+
+log_hyperparameter_search("--- Finalized scores ")
+log_hyperparameter_search("\tAccuracy: %s" % accuracy_score)
+log_hyperparameter_search("\tLoss: %s" % loss_score)
+
+# Choose the best model out of all three based on accuracy
+# For Loss, it is required to adjust the score here and the values taken for the diagrams below.
+# Tip: Search ''accuracy'' and replace
+best_accuracy = max(accuracy_score, key=accuracy_score.get)
+print("Algorithm: %s" % best_accuracy)
+
+best_accuracy_value = max(accuracy_score.values())
+print("Score: %s" % best_accuracy_value)
+
+model = 0
+if best_accuracy == "RandomSearch":
+    model = tuner.hypermodel.build(best_hps_rs)
+elif best_accuracy == "BayesianOptimization":
+    model = tuner.hypermodel.build(best_hps_bo)
+elif best_accuracy == "HyperBand":
+    model = tuner.hypermodel.build(best_hps_hb)
+
+# Train a new model with the optimal algorithm and parameters
+history = model.fit(
+    x=train_data, 
+    y=train_label, 
+    batch_size=config.batch_size, 
+    epochs=config.num_epochs, 
+    shuffle=True, 
+    validation_data=(test_data, test_label)
+)
+
+end_time = time.time() - start_time
+params = {"HPS-Opt-Keras":{"batch_size":config.batch_size, "epochs":config.num_epochs}}
+log_training_results("Trained new model: %s in %s seconds" % (params, end_time))
+
+
+# Display Accuracy
+fig = plt.figure()
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('Model Accuracy')
@@ -309,9 +408,27 @@ plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
 plt.show()
+fig.savefig(plots+'/training_history_optimal.png')
 
-evaluation = model.evaluate(test_data, test_label)
-print("[test loss, test accuracy]:", evaluation)
+# When a machine learning model has high training accuracy and very low validation then this case is probably known as over-fitting. The reasons for this can be as follows:
+#    The hypothesis function you are using is too complex that your model perfectly fits the training data but fails to do on test/validation data.
+#    The number of learning parameters in your model is way too big that instead of generalizing the examples , your model learns those examples and hence the model performs badly on test/validation data.
+
+
+start_time = time.time()
+test_loss, test_acc = model.evaluate(train_data, train_label)
+end_time = time.time() - start_time
+log_training_results("\tPredicting train data -- execution time: %ss" % (end_time))
+log_training_results("\t[%s] -- Accuracy: %s; Loss: %s" % (params, test_acc, test_loss))  
+
+
+# Evaluate model based on supplied tags
+start_time = time.time()
+test_loss, test_acc = model.evaluate(test_data, test_label)
+end_time = time.time() - start_time
+
+log_training_results("\tPredicting test data --  execution time: %ss" % (end_time))
+log_training_results("\t[%s] -- Accuracy: %s; Loss: %s" % (params, test_acc, test_loss))  
 
 # Let model predict data
 y_pred = model.predict(test_data)
@@ -324,5 +441,6 @@ fig, ax = plt.subplots(figsize=(16,8))
 ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
-ax.set_title('CIFAR-10-Keras Confusion Matrix of optimal NN')
-fig.savefig('plots/ConfusionMatrix_optimal.png')
+ax.set_title('CIFAR-10 Keras Confusion Matrix of optimal NN')
+plt.show()
+fig.savefig(plots+'/ConfusionMatrix_optimal.png')
