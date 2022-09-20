@@ -1,0 +1,7 @@
+[2022-09-19 21:33:49.236626] on (Linux-5.15.0-46-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+--- [2022-09-19 21:35:46.052615] Trained new model: {'Keras': {'batch_size': 32, 'epochs': 8}} in 113.73144841194153 seconds ---
+	Predicting train data -- Execution time: 2.4620325565338135s; Accuracy: 0.5498839616775513; Loss: 1.2576926946640015
+	Predicting test data -- Execution time: 0.5171761512756348s; Accuracy: 0.518207311630249; Loss: 1.333624243736267
+--- [2022-09-19 23:15:35.039039] Trained new model: {'HPS-Opt-Keras': {'batch_size': 32, 'epochs': 8}} in 91.36778020858765 seconds ---
+	Predicting train data -- Execution time: 1.9360599517822266s; Accuracy: 0.825346052646637; Loss: 0.5559049248695374
+	Predicting test data -- Execution time: 0.39240550994873047s; Accuracy: 0.6186474561691284; Loss: 1.1099543571472168
