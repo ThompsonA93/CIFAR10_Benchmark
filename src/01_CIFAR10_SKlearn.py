@@ -48,11 +48,13 @@ if config.hyper_parameter_search:
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
+
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
 print("Shape of training labels:\t", y_train.shape)
 print("Shape of testing data:\t\t", X_test.shape)
 print("Shape of testing labels:\t", y_test.shape)
+
 
 # Visualize some examples
 cols=8
@@ -66,8 +68,7 @@ for i in range(rows):
         ax[i,j].imshow(X_train[index])
         ax[i,j].axis('off')
         index += 1
-plt.show()
-
+plt.show(block = False)
 
 train_data = X_train
 train_label = y_train
@@ -81,6 +82,7 @@ train_data = X_train.reshape(X_train.shape[0], 32*32*3).astype('float32')
 train_label = y_train.astype("float32")
 test_data = X_test.reshape(X_test.shape[0], 32*32*3).astype('float32')
 test_label = y_test.astype("float32")
+
 
 # We know the RGB color code where different values produce various colors. It is also difficult to remember every color combination. 
 # We already know that each pixel has its unique color code and also we know that it has a maximum value of 255. 
@@ -128,6 +130,7 @@ mlp = MLPClassifier(
     max_fun=15000                   # Only used when solver=’lbfgs’. Maximum number of loss function calls. 
 )
 
+
 # Set up the multi-layer perceptron classifier and fit to datasets.
 mlp = MLPClassifier(
     batch_size=config.batch_size,
@@ -144,6 +147,7 @@ end_time = time.time() - start_time
 params = {"MLP":{'batch_size':mlp.get_params()["batch_size"], 'num_epochs':mlp.get_params()["max_iter"], 'num_of_units':mlp.get_params()["hidden_layer_sizes"], 'activation':mlp.get_params()["activation"], 'alpha':mlp.get_params()["alpha"], 'epsilon':mlp.get_params()["epsilon"]}}
 log_training_results("Trained new model: %s in %s seconds" % (params, end_time))
 
+
 # Predict using the multi-layer perceptron classifier.
 start_time = time.time()
 #   train_data ... {array-like, sparse matrix} of shape (n_samples, n_features)
@@ -156,6 +160,7 @@ start_time = time.time()
 predictions = mlp.predict(test_data)
 end_time = time.time() - start_time
 log_training_results("\tPredicting test data -- execution time: %ss" % (end_time))
+
 
 
 # Analyze results
@@ -176,13 +181,13 @@ log_training_results("\t[Test-data x %s] -- mean accuracy: %s; execution time: %
 if config.hyper_parameter_search:
     mlp = MLPClassifier()
     parameters = {
-        'hidden_layer_sizes': [(64,),(128,),(256,)],
+        'hidden_layer_sizes': [(64,),(128,),(256,),(512,)],
         'max_iter': [10, 20],
-        'batch_size': [64, 128],
-        #'activation': ['tanh', 'relu'],
-        'activation': ['relu'],
-        #'solver': ['sgd', 'adam'],
-        'solver': ['adam'],
+        'batch_size': [64, 128, 256],
+        'activation': ['tanh', 'relu'],
+        #'activation': ['relu'],
+        'solver': ['sgd', 'adam'],
+        #'solver': ['adam'],
         'alpha': [0.001, 0.0001],
         'learning_rate': ['constant','adaptive'],
     }
@@ -211,4 +216,8 @@ if config.hyper_parameter_search:
     y_true, y_pred = test_label, grid.predict(test_data)
     log_hyperparameter_search(classification_report(y_true, y_pred))
     print()
+
+
+
+
 
