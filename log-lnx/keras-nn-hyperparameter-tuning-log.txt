@@ -1,0 +1,22 @@
+[2022-09-20 21:14:01.135570] on (Linux-5.15.0-46-generic-x86_64-with-glibc2.29, x86_64) using (Train: 6250, Test: 1250)
+--- [2022-09-20 21:18:14.553977] Running Parameter-Tests [Keras-RandomSearch] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'tanh', 'Use MaxPooling2D': True, 'Use dropout layers': True, 'Dropout rate': 0.39999999999999997, 'Use dense layers': False, 'Dense Units': 128, 'Dense Activation': 'sigmoid', 'Learning rate': 0.0001}
+	Predicting test data -- Accuracy: 0.40512409806251526; Loss: 1.7340798377990723
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.44999999999999996, 'Use dense layers': True, 'Dense Units': 288, 'Dense Activation': 'relu', 'Learning rate': 0.001}
+	Predicting test data -- Accuracy: 0.356285035610199; Loss: 4.346632957458496
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'tanh', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.35, 'Use dense layers': True, 'Dense Units': 480, 'Dense Activation': 'sigmoid', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.3402722179889679; Loss: 1.996132493019104
+--- [2022-09-20 21:20:21.357372] Running Parameter-Tests [Keras-BayesianOptimization] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.25, 'Use dense layers': False, 'Dense Units': 32, 'Dense Activation': 'relu', 'Learning rate': 0.01}
+	Predicting test data -- Accuracy: 0.3010408282279968; Loss: 6.0242438316345215
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.35, 'Use dense layers': False, 'Dense Units': 384, 'Dense Activation': 'relu', 'Learning rate': 0.01}
+	Predicting test data -- Accuracy: 0.244195356965065; Loss: 7.624220371246338
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.35, 'Use dense layers': False, 'Dense Units': 288, 'Dense Activation': 'relu', 'Learning rate': 0.01}
+	Predicting test data -- Accuracy: 0.22257806360721588; Loss: 9.134050369262695
+--- [2022-09-20 21:30:22.821327] Running Parameter-Tests [Keras-Hyperband] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': False, 'Use dropout layers': False, 'Dropout rate': 0.44999999999999996, 'Use dense layers': True, 'Dense Units': 480, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 15, 'tuner/initial_epoch': 5, 'tuner/bracket': 2, 'tuner/round': 2, 'tuner/trial_id': '0012'}
+	Predicting test data -- Accuracy: 0.5252201557159424; Loss: 1.8868718147277832
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'tanh', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.3, 'Use dense layers': False, 'Dense Units': 32, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 15, 'tuner/initial_epoch': 5, 'tuner/bracket': 1, 'tuner/round': 1, 'tuner/trial_id': '0022'}
+	Predicting test data -- Accuracy: 0.5260208249092102; Loss: 1.647507667541504
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'tanh', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.3, 'Use dense layers': False, 'Dense Units': 32, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 5, 'tuner/initial_epoch': 0, 'tuner/bracket': 1, 'tuner/round': 0}
+	Predicting test data -- Accuracy: 0.48919135332107544; Loss: 1.5405737161636353
