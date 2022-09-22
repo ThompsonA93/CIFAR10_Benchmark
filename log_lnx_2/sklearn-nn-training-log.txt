@@ -1,0 +1,18 @@
+[2022-09-21 22:20:01.855158] on (Linux-5.15.0-48-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+Trained new model: {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}} in 149.62932753562927 seconds
+	Predicting train data -- execution time: 0.7294893264770508s
+	Predicting test data -- execution time: 0.11533308029174805s
+	[Train-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.4864389151132091; execution time: 0.6282076835632324s
+	[Test-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.41936774709883956; execution time: 0.13267755508422852s
+[2022-09-22 02:46:58.985275] on (Linux-5.15.0-48-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+Trained new model: {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}} in 106.85792803764343 seconds
+	Predicting train data -- execution time: 0.3689906597137451s
+	Predicting test data -- execution time: 0.07495903968811035s
+	[Train-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.48251860148811904; execution time: 0.36487293243408203s
+	[Test-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.4101640656262505; execution time: 0.0709831714630127s
+[2022-09-22 06:01:33.302530] on (Linux-5.15.0-48-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+Trained new model: {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}} in 114.1422986984253 seconds
+	Predicting train data -- execution time: 0.5620982646942139s
+	Predicting test data -- execution time: 0.10128951072692871s
+	[Train-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.48227858228658294; execution time: 0.5058395862579346s
+	[Test-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.42096838735494196; execution time: 0.11039972305297852s

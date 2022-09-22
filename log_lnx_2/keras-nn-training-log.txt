@@ -1,0 +1,14 @@
+[2022-09-22 01:30:48.672341] on (Linux-5.15.0-48-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+--- [2022-09-22 01:33:55.144560] Trained new model: {'Keras': {'batch_size': 32, 'epochs': 20}} in 185.01200938224792 seconds ---
+	Predicting train data -- Execution time: 1.8620805740356445s; Accuracy: 0.722937822341919; Loss: 0.8205409049987793
+	Predicting test data -- Execution time: 0.39404749870300293s; Accuracy: 0.6054421663284302; Loss: 1.1196842193603516
+--- [2022-09-22 02:46:53.536099] Trained new model: {'HPS-Opt-Keras': {'batch_size': 32, 'epochs': 20}} in 126.60048747062683 seconds ---
+	Predicting train data -- Execution time: 1.3707513809204102s; Accuracy: 0.9647971987724304; Loss: 0.13011609017848969
+	Predicting test data -- Execution time: 0.2875032424926758s; Accuracy: 0.6058423519134521; Loss: 1.4863364696502686
+[2022-09-22 05:56:04.118154] on (Linux-5.15.0-48-generic-x86_64-with-glibc2.29, x86_64) using (Train: 12500, Test: 2500)
+--- [2022-09-22 05:59:11.447598] Trained new model: {'Keras': {'batch_size': 32, 'epochs': 20}} in 185.87553930282593 seconds ---
+	Predicting train data -- Execution time: 1.8727004528045654s; Accuracy: 0.7203776240348816; Loss: 0.8107143044471741
+	Predicting test data -- Execution time: 0.4141960144042969s; Accuracy: 0.5982393026351929; Loss: 1.1297647953033447
+--- [2022-09-22 06:01:28.228341] Trained new model: {'HPS-Opt-Keras': {'batch_size': 32, 'epochs': 20}} in 127.05838894844055 seconds ---
+	Predicting train data -- Execution time: 1.3584797382354736s; Accuracy: 0.9617569446563721; Loss: 0.13434797525405884
+	Predicting test data -- Execution time: 0.31943225860595703s; Accuracy: 0.6194477677345276; Loss: 1.4114856719970703
