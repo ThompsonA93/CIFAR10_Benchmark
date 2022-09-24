@@ -1,6 +1,6 @@
 \chapter{Results}
 The results stem from a common configuration pattern for both SKLearn and Keras, aswell as distinct parametrization of algorithms for each.
-The training set is reduced from 50000 to 6250 datapoints, while the test set is reduced from 10000 to 1250. The reduction was deemed necessary to ensure
+The training set is reduced from 50000 to 12500 datapoints, while the test set is reduced from 10000 to 2500. The reduction was deemed necessary to ensure
 adequate expenditure of time for the algorithms. 
 
 Notably, the displayed values are one of many produced results and may vary from execution to execution.
@@ -17,7 +17,7 @@ reliable reference for further approaches. The basic model always uses the same 
 Secondly, we run hyperparameter evaluation using the \href{https://keras.io/keras_tuner/}{keras\_tuner} library, to find models that are 
 more accurate. The model resembles the standard model, with deviations in activation functions, dropout and learning rates and units in the dense layer, as well as randomized deactivation of whole layer structures.
 While almost every aspect of the model can be adjusted (see Overengineered Model), the more fundamental approach (Hypermodel) allowed for better training times while being similarly efficient in it's search.
-The Hypermodel is used for the strategy of a Random Search, a Bayesian Optimization and a \href{https://arxiv.org/abs/1603.06560}{Hyperband}
+The Hypermodel is used for the strategy of Random Search, Bayesian Optimization and \href{https://arxiv.org/abs/1603.06560}{Hyperband}
 
 Thirdly, utilizing the findings by the hyperparameter search, a model is created and trained using the most optimal setup found during the evaluation.
 In the current implementation, the model with the highest accuracy score of the three mentioned strategies is chosen.

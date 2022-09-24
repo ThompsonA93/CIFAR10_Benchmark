@@ -37,13 +37,16 @@ import config
 num_train = config.num_train                   # 60000 for full data set 
 num_test  = config.num_test                    # 10000 for full data set
 
+dt = datetime.today().strftime('%Y%m%d_%H%M%S')
+
+
 # Simple functions to log information
-path = os.getcwd()+"/log"
+path = os.getcwd()+"/log/"+config.os+"/"+dt
 logDir = os.path.exists(path)
 if not logDir:
     os.makedirs(path)
 
-plots = os.getcwd()+"/log/plots"
+plots = path+"/plots"
 logDir = os.path.exists(plots)
 if not logDir:
     os.makedirs(plots)
@@ -69,7 +72,6 @@ log_training_results("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.
 if config.hyper_parameter_search:
     log_hyperparameter_search("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
 
-
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
@@ -79,6 +81,7 @@ print("Shape of training data:\t\t", X_train.shape)
 print("Shape of training labels:\t", y_train.shape)
 print("Shape of testing data:\t\t", X_test.shape)
 print("Shape of testing labels:\t", y_test.shape)
+
 
 # Visualize some examples
 cols=8
@@ -92,8 +95,9 @@ for i in range(rows):
         ax[i,j].imshow(X_train[index])
         ax[i,j].axis('off')
         index += 1
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/cifar10_examples.png')
+
 
 train_data = X_train
 train_label = y_train
@@ -105,6 +109,7 @@ train_data = X_train.astype('float32')
 train_label = y_train.astype("float32")
 test_data = X_test.astype('float32')
 test_label = y_test.astype("float32")
+
 
 # We know the RGB color code where different values produce various colors. It is also difficult to remember every color combination. 
 # We already know that each pixel has its unique color code and also we know that it has a maximum value of 255. 
@@ -185,7 +190,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/training_history_standard.png')
 
 
@@ -215,88 +220,13 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of standard NN')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/ConfusionMatrix_standard.png')
 
 if not config.hyper_parameter_search:
     print("Terminating without hyperparameter search.")
     exit(0)
 print("Starting hyperparameter search over %s epochs each" % (config.hps_max_epochs))
-
-""""
-# Overengineered Model
-# Takes too damn long
-# Debatable whether this might produce any meaningful data
-# Gives a fair overview over what can be configured for HPS
-def model_builder(hp):
-    ### Base Model
-    model = keras.Sequential()
-
-    ### Layers    
-    # MANDATORY :: First convolutional layer
-    hp_first_conv2d_activation = hp.Choice('First Conv2D activation', ['relu', 'tanh', 'sigmoid'])
-    model.add(Conv2D(filters=32, kernel_size=(3, 3), input_shape=(32,32,3), activation=hp_first_conv2d_activation, padding='same')) 
-
-    # OPTIONAL :: Second convolutional layer
-    hp_second_conv2d = hp.Boolean("Use Second Conv2D")
-    if hp_second_conv2d:
-        hp_second_conv2d_activation = hp.Choice('Second Conv2D activation', ['relu', 'tanh', 'sigmoid'])
-        model.add(Conv2D(filters=32, kernel_size=(3, 3), activation=hp_second_conv2d_activation))
-
-    # OPTIONAL :: Max pooling layer
-    hp_maxpooling2d = hp.Boolean("Use MaxPooling2D")
-    if hp_maxpooling2d:
-        model.add(MaxPooling2D(pool_size=(2, 2))) 
-        
-    # OPTIONAL :: Dropout
-    hp_first_dropout = hp.Boolean("Use First Dropout")
-    if hp_first_dropout:
-        hp_first_dropout_rate = hp.Float('First dropout rate', min_value=0.25, max_value=0.50, step=0.05)
-        model.add(Dropout(rate=hp_first_dropout_rate))
-
-    # MANDATORY :: Flatten input into feature vector and feed into dense layer
-    model.add(Flatten()) 
-    
-    # OPTIONAL :: First dense layer 
-    hp_first_dense = hp.Boolean("Use First Dense")
-    if hp_first_dense:
-        hp_first_dense_activation = hp.Choice('First dense activation', ['relu', 'tanh', 'sigmoid'])
-        hp_first_dense_units = hp.Int('First dense units', min_value=32, max_value=512, step=32)
-        model.add(Dense(units=hp_first_dense_units, activation=hp_first_dense_activation))
-    
-    # OPTIONAL :: Dropout
-    hp_second_dropout = hp.Boolean("Use Second Dropout")
-    if hp_second_dropout:
-        hp_second_dropout_rate = hp.Float('Second dropout rate', min_value=0.25, max_value=0.50, step=0.05)
-        model.add(Dropout(rate=hp_second_dropout_rate))
-        
-    # OPTIONAL :: Second dense layer
-    hp_second_dense = hp.Boolean("Use Second Dense")
-    if hp_second_dense:
-        hp_second_dense_activation = hp.Choice('Second dense activation', ['relu', 'tanh', 'sigmoid'])
-        hp_second_dense_units = hp.Int('Second dense units', min_value=32, max_value=512, step=32)
-        model.add(Dense(units=hp_second_dense_units, activation=hp_second_dense_activation))
-
-    # OPTIONAL :: Dropout
-    hp_third_dropout = hp.Boolean("Use Third Dropout")
-    if hp_third_dropout:
-        hp_third_dropout_rate = hp.Float('Third dropout rate', min_value=0.25, max_value=0.50, step=0.05)
-        model.add(Dropout(rate=hp_third_dropout_rate))
-
-    # MANDATORY :: Outputs from dense layer are projected onto 10 unit output layer
-    hp_third_dense_activation = hp.Choice('Third activation', ['relu', 'tanh', 'sigmoid'])
-    model.add(Dense(units=config.num_classes, activation=hp_third_dense_activation))
-
-    # Compile model
-    hp_learning_rate = hp.Choice('Optimizer learnrate', [1e-2, 1e-3, 1e-4, 1e-5])
-    optimizer = keras.optimizers.RMSprop(
-        learning_rate=hp_learning_rate,
-        epsilon = 1e-6,
-    )
-    model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-
-    return model
-"""
 
 # Hypermodel
 def model_builder(hp):
@@ -441,6 +371,7 @@ tuner = kt.Hyperband(
     project_name='keras-hyperparameter-search-Hyperband'
 )
 
+
 stop_early = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=3, verbose=1)
 csvlogger = keras.callbacks.CSVLogger(hyperparameter_search_log, separator=",", append=True)
 tuner.search(
@@ -516,7 +447,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/training_history_optimal.png')
 
 # When a machine learning model has high training accuracy and very low validation then this case is probably known as over-fitting. The reasons for this can be as follows:
@@ -547,5 +478,5 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of optimal NN')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/ConfusionMatrix_optimal.png')
