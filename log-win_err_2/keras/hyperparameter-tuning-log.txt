@@ -1,0 +1,22 @@
+[2022-09-26 11:50:57.551676] on (Windows-10-10.0.19044-SP0, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel) using (Train: 12500, Test: 2500)
+--- [2022-09-26 13:06:43.369081] Running Parameter-Tests [Keras-RandomSearch] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': False, 'Use dropout layers': True, 'Dropout rate': 0.35, 'Use dense layers': True, 'Dense Units': 256, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001}
+	Predicting test data -- Accuracy: 0.5458183288574219; Loss: 1.3705358505249023
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': True, 'Dropout rate': 0.44999999999999996, 'Use dense layers': False, 'Dense Units': 64, 'Dense Activation': 'sigmoid', 'Learning rate': 0.01}
+	Predicting test data -- Accuracy: 0.33973589539527893; Loss: 1.8604521751403809
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'sigmoid', 'Use MaxPooling2D': False, 'Use dropout layers': True, 'Dropout rate': 0.25, 'Use dense layers': True, 'Dense Units': 160, 'Dense Activation': 'relu', 'Learning rate': 0.001}
+	Predicting test data -- Accuracy: 0.2877150774002075; Loss: 2.1473536491394043
+--- [2022-09-26 17:11:52.659779] Running Parameter-Tests [Keras-BayesianOptimization] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'tanh', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.35, 'Use dense layers': True, 'Dense Units': 96, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.4077630937099457; Loss: 2.3125250339508057
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': False, 'Use dropout layers': False, 'Dropout rate': 0.3, 'Use dense layers': True, 'Dense Units': 32, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.3909563720226288; Loss: 2.5154869556427
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': False, 'Use dropout layers': False, 'Dropout rate': 0.3, 'Use dense layers': True, 'Dense Units': 64, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.3997599184513092; Loss: 2.5173707008361816
+--- [2022-09-26 21:07:33.888148] Running Parameter-Tests [Keras-Hyperband] ---
+Best parameters set found on following development set: {'Use 2nd Conv. Layer': True, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': False, 'Dropout rate': 0.44999999999999996, 'Use dense layers': False, 'Dense Units': 128, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 30, 'tuner/initial_epoch': 0, 'tuner/bracket': 0, 'tuner/round': 0}
+	Predicting test data -- Accuracy: 0.5894357562065125; Loss: 1.2541342973709106
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': True, 'Use dropout layers': True, 'Dropout rate': 0.39999999999999997, 'Use dense layers': False, 'Dense Units': 224, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 30, 'tuner/initial_epoch': 10, 'tuner/bracket': 2, 'tuner/round': 2, 'tuner/trial_id': '0067'}
+	Predicting test data -- Accuracy: 0.552621066570282; Loss: 1.3034820556640625
+Additional parameters set found on following development set: {'Use 2nd Conv. Layer': False, 'Conv2D Activation': 'relu', 'Use MaxPooling2D': False, 'Use dropout layers': False, 'Dropout rate': 0.39999999999999997, 'Use dense layers': True, 'Dense Units': 160, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 30, 'tuner/initial_epoch': 10, 'tuner/bracket': 3, 'tuner/round': 3, 'tuner/trial_id': '0046'}
+	Predicting test data -- Accuracy: 0.518207311630249; Loss: 1.3954737186431885

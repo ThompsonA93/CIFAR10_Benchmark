@@ -1,0 +1,6 @@
+[2022-09-26 11:50:54.046496] on (Windows-10-10.0.19044-SP0, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel) using (Train: 12500, Test: 2500)
+Trained new model: {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}} in 579.3269419670105 seconds
+	Predicting train data -- execution time: 0.8695869445800781s
+	Predicting test data -- execution time: 0.29642605781555176s
+	[Train-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.48539883190655253; execution time: 1.0279462337493896s
+	[Test-data x {'MLP': {'batch_size': 32, 'num_epochs': 20, 'num_of_units': 256, 'activation': 'relu', 'alpha': 0.0001, 'epsilon': 1e-08}}] -- mean accuracy: 0.41456582633053224; execution time: 0.29659605026245117s

@@ -95,7 +95,7 @@ for i in range(rows):
         ax[i,j].imshow(X_train[index])
         ax[i,j].axis('off')
         index += 1
-plt.show()
+plt.show(block = False)
 fig.savefig(plots+'/cifar10_examples.png')
 
 
@@ -190,7 +190,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show()
+plt.show(block = False)
 fig.savefig(plots+'/training_history_standard.png')
 
 
@@ -220,7 +220,7 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of standard NN')
-plt.show()
+plt.show(block = False)
 fig.savefig(plots+'/ConfusionMatrix_standard.png')
 
 if not config.hyper_parameter_search:
@@ -447,7 +447,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show()
+plt.show(block = False)
 fig.savefig(plots+'/training_history_optimal.png')
 
 # When a machine learning model has high training accuracy and very low validation then this case is probably known as over-fitting. The reasons for this can be as follows:
@@ -478,5 +478,5 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of optimal NN')
-plt.show()
+plt.show(block = False)
 fig.savefig(plots+'/ConfusionMatrix_optimal.png')

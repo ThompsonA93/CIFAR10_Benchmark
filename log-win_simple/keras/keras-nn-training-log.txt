@@ -1,0 +1,7 @@
+[2022-09-20 14:42:57.589017] on (Windows-10-10.0.19044-SP0, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel) using (Train: 6250, Test: 1250)
+--- [2022-09-20 14:44:40.392430] Trained new model: {'Keras': {'batch_size': 32, 'epochs': 10}} in 99.97050666809082 seconds ---
+	Predicting train data -- Execution time: 1.7971601486206055s; Accuracy: 0.5135221481323242; Loss: 1.3555371761322021
+	Predicting test data -- Execution time: 0.3897683620452881s; Accuracy: 0.4715772569179535; Loss: 1.470583200454712
+--- [2022-09-20 15:35:42.940040] Trained new model: {'HPS-Opt-Keras': {'batch_size': 32, 'epochs': 10}} in 114.58384299278259 seconds ---
+	Predicting train data -- Execution time: 1.5238370895385742s; Accuracy: 0.8758201599121094; Loss: 0.4363606870174408
+	Predicting test data -- Execution time: 0.40241503715515137s; Accuracy: 0.5268214344978333; Loss: 1.4896273612976074
