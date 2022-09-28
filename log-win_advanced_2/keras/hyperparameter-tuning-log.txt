@@ -1,0 +1,22 @@
+[2022-09-27 16:16:12.839643] on (Windows-10-10.0.19044-SP0, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel) using (Train: 12500, Test: 2500)
+--- [2022-09-27 17:00:57.064088] Running Parameter-Tests [Keras-RandomSearch] ---
+Best parameters set found on following development set: {'Conv2D Activation': 'tanh', 'Dropout rate': 0.3, 'Dense Units': 448, 'Dense Activation': 'relu', 'Learning rate': 0.0001}
+	Predicting test data -- Accuracy: 0.42296919226646423; Loss: 1.9702255725860596
+Additional parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.25, 'Dense Units': 192, 'Dense Activation': 'relu', 'Learning rate': 0.001}
+	Predicting test data -- Accuracy: 0.35334134101867676; Loss: 1.8446855545043945
+Additional parameters set found on following development set: {'Conv2D Activation': 'sigmoid', 'Dropout rate': 0.39999999999999997, 'Dense Units': 256, 'Dense Activation': 'relu', 'Learning rate': 0.01}
+	Predicting test data -- Accuracy: 0.27050819993019104; Loss: 7.551784038543701
+--- [2022-09-27 22:35:11.619890] Running Parameter-Tests [Keras-BayesianOptimization] ---
+Best parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.3, 'Dense Units': 384, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.4233693480491638; Loss: 2.0376853942871094
+Additional parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.3, 'Dense Units': 384, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.43017205595970154; Loss: 2.0165903568267822
+Additional parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.3, 'Dense Units': 384, 'Dense Activation': 'relu', 'Learning rate': 1e-05}
+	Predicting test data -- Accuracy: 0.4337735176086426; Loss: 2.024582624435425
+--- [2022-09-28 01:48:40.633466] Running Parameter-Tests [Keras-Hyperband] ---
+Best parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.3, 'Dense Units': 128, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 30, 'tuner/initial_epoch': 10, 'tuner/bracket': 3, 'tuner/round': 3, 'tuner/trial_id': '0047'}
+	Predicting test data -- Accuracy: 0.6166466474533081; Loss: 1.1819623708724976
+Additional parameters set found on following development set: {'Conv2D Activation': 'tanh', 'Dropout rate': 0.44999999999999996, 'Dense Units': 480, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 30, 'tuner/initial_epoch': 10, 'tuner/bracket': 3, 'tuner/round': 3, 'tuner/trial_id': '0046'}
+	Predicting test data -- Accuracy: 0.5922368764877319; Loss: 1.2619372606277466
+Additional parameters set found on following development set: {'Conv2D Activation': 'relu', 'Dropout rate': 0.3, 'Dense Units': 128, 'Dense Activation': 'sigmoid', 'Learning rate': 0.001, 'tuner/epochs': 10, 'tuner/initial_epoch': 4, 'tuner/bracket': 3, 'tuner/round': 2, 'tuner/trial_id': '0035'}
+	Predicting test data -- Accuracy: 0.5314125418663025; Loss: 1.2906620502471924

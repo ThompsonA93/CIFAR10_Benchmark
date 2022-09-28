@@ -6,6 +6,7 @@ import os
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+%matplotlib inline
 
 # https://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
 SMALL_SIZE = 16
@@ -37,11 +38,8 @@ import config
 num_train = config.num_train                   # 60000 for full data set 
 num_test  = config.num_test                    # 10000 for full data set
 
-dt = datetime.today().strftime('%Y%m%d_%H%M%S')
-
-
 # Simple functions to log information
-path = os.getcwd()+"/log/"+config.os+"/"+dt
+path = os.getcwd()+"/log/keras"
 logDir = os.path.exists(path)
 if not logDir:
     os.makedirs(path)
@@ -51,14 +49,14 @@ logDir = os.path.exists(plots)
 if not logDir:
     os.makedirs(plots)
 
-training_results = path+"/keras-nn-training-log.txt"
+training_results = path+"/training-log.txt"
 def log_training_results(*s):
     with open(training_results, 'a') as f:
         for arg in s:
             print(arg, file=f)
             print(arg)
 
-hyperparameter_search_log = path+"/keras-nn-hyperparameter-tuning-log.txt"
+hyperparameter_search_log = path+"/hyperparameter-tuning-log.txt"
 def log_hyperparameter_search(*s):
     with open(hyperparameter_search_log, 'a') as f:
         for arg in s:
@@ -75,13 +73,11 @@ if config.hyper_parameter_search:
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
-
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
 print("Shape of training labels:\t", y_train.shape)
 print("Shape of testing data:\t\t", X_test.shape)
 print("Shape of testing labels:\t", y_test.shape)
-
 
 # Visualize some examples
 cols=8
@@ -95,7 +91,7 @@ for i in range(rows):
         ax[i,j].imshow(X_train[index])
         ax[i,j].axis('off')
         index += 1
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/cifar10_examples.png')
 
 
@@ -168,6 +164,7 @@ optimizer = keras.optimizers.RMSprop(
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
+
 # Train model
 
 start_time = time.time()
@@ -190,7 +187,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/training_history_standard.png')
 
 
@@ -220,7 +217,7 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of standard NN')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/ConfusionMatrix_standard.png')
 
 if not config.hyper_parameter_search:
@@ -297,7 +294,7 @@ tuner = kt.RandomSearch(
     objective='val_accuracy',
     #max_epochs=config.max_trials,
     #factor=3,                    
-    directory='log/hps',
+    directory=path+'/hps',
     project_name='keras-hyperparameter-search-RandomSearch'
 )
 
@@ -331,7 +328,7 @@ tuner = kt.BayesianOptimization(
     objective='val_accuracy',
     max_trials=config.hps_max_trials,
     #factor=3,                    
-    directory='log/hps',
+    directory=path+'/hps',
     project_name='keras-hyperparameter-search-BayesianOptimization'
 )
 
@@ -367,7 +364,7 @@ tuner = kt.Hyperband(
     objective='val_accuracy',
     max_epochs=config.hps_max_trials,
     factor=3,                    
-    directory='log/hps',
+    directory=path+'/hps',
     project_name='keras-hyperparameter-search-Hyperband'
 )
 
@@ -447,7 +444,7 @@ plt.title('Model Accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('Epoch')
 plt.legend(['Training', 'Validation'], loc='upper left')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/training_history_optimal.png')
 
 # When a machine learning model has high training accuracy and very low validation then this case is probably known as over-fitting. The reasons for this can be as follows:
@@ -478,5 +475,5 @@ ax = sns.heatmap(confusion_mtx, annot=True, fmt='d', ax=ax, cmap="Blues")
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
 ax.set_title('CIFAR-10 Keras Confusion Matrix of optimal NN')
-plt.show(block = False)
+plt.show()
 fig.savefig(plots+'/ConfusionMatrix_optimal.png')

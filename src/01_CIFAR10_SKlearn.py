@@ -16,24 +16,30 @@ from sklearn.metrics import classification_report
 # Additional configurations, @see config.py
 import config
 
-# Training-Sizes
+# Training-Sizesfirevo
 num_train = config.num_train
 num_test  = config.num_test
 
 # Simple functions to log information
-path = os.getcwd()+"/log"
+path = os.getcwd()+"/log/sklearn"
 logDir = os.path.exists(path)
 if not logDir:
     os.makedirs(path)
 
-training_results = path+"/sklearn-nn-training-log.txt"
+
+plots = path+"/plots"
+logDir = os.path.exists(plots)
+if not logDir:
+    os.makedirs(plots)
+
+training_results = path+"/training-log.txt"
 def log_training_results(*s):
     with open(training_results, 'a') as f:
         for arg in s:
             print(arg, file=f)
             print(arg)
 
-hyperparameter_search_log = path+"/sklearn-nn-hyperparameter-tuning-log.txt"
+hyperparameter_search_log = path+"/hyperparameter-tuning-log.txt"
 def log_hyperparameter_search(*s):
     with open(hyperparameter_search_log, 'a') as f:
         for arg in s:
@@ -41,6 +47,8 @@ def log_hyperparameter_search(*s):
             print(arg)
 
 print("Generated data will be located in ", training_results, hyperparameter_search_log)
+print("Generated plots will be located in ", plots)
+
 log_training_results("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
 if config.hyper_parameter_search:
     log_hyperparameter_search("[%s] on (%s, %s) using (Train: %s, Test: %s)" % (datetime.now(), config.os, config.cpu, config.num_train, config.num_test))
@@ -48,13 +56,11 @@ if config.hyper_parameter_search:
 # Fetch CIFAR10-Data from Keras repository
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 
-
 print("\t\t\t\t (Sets,  X,  Y, RGB)")
 print("Shape of training data:\t\t", X_train.shape)
 print("Shape of training labels:\t", y_train.shape)
 print("Shape of testing data:\t\t", X_test.shape)
 print("Shape of testing labels:\t", y_test.shape)
-
 
 # Visualize some examples
 cols=8
@@ -68,7 +74,9 @@ for i in range(rows):
         ax[i,j].imshow(X_train[index])
         ax[i,j].axis('off')
         index += 1
-plt.show(block = False)
+plt.show()
+fig.savefig(plots+'/cifar10_examples.png')
+
 
 train_data = X_train
 train_label = y_train
@@ -82,7 +90,6 @@ train_data = X_train.reshape(X_train.shape[0], 32*32*3).astype('float32')
 train_label = y_train.astype("float32")
 test_data = X_test.reshape(X_test.shape[0], 32*32*3).astype('float32')
 test_label = y_test.astype("float32")
-
 
 # We know the RGB color code where different values produce various colors. It is also difficult to remember every color combination. 
 # We already know that each pixel has its unique color code and also we know that it has a maximum value of 255. 
@@ -130,7 +137,6 @@ mlp = MLPClassifier(
     max_fun=15000                   # Only used when solver=’lbfgs’. Maximum number of loss function calls. 
 )
 
-
 # Set up the multi-layer perceptron classifier and fit to datasets.
 mlp = MLPClassifier(
     batch_size=config.batch_size,
@@ -147,7 +153,6 @@ end_time = time.time() - start_time
 params = {"MLP":{'batch_size':mlp.get_params()["batch_size"], 'num_epochs':mlp.get_params()["max_iter"], 'num_of_units':mlp.get_params()["hidden_layer_sizes"], 'activation':mlp.get_params()["activation"], 'alpha':mlp.get_params()["alpha"], 'epsilon':mlp.get_params()["epsilon"]}}
 log_training_results("Trained new model: %s in %s seconds" % (params, end_time))
 
-
 # Predict using the multi-layer perceptron classifier.
 start_time = time.time()
 #   train_data ... {array-like, sparse matrix} of shape (n_samples, n_features)
@@ -162,17 +167,16 @@ end_time = time.time() - start_time
 log_training_results("\tPredicting test data -- execution time: %ss" % (end_time))
 
 
-
 # Analyze results
 start_time = time.time()
-score = mlp.score(train_data, train_label)
+score_train = mlp.score(train_data, train_label)
 end_time = time.time() - start_time
-log_training_results("\t[Train-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score, end_time))  
+log_training_results("\t[Train-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score_train, end_time))  
 
 start_time = time.time()
-score = mlp.score(test_data, test_label)
+score_test = mlp.score(test_data, test_label)
 end_time = time.time() - start_time
-log_training_results("\t[Test-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score, end_time))  
+log_training_results("\t[Test-data x %s] -- mean accuracy: %s; execution time: %ss" % (params, score_test, end_time))  
 
 # # # Hyperparameter search -- Takes up a long time.
 # 960 Fits for all params, takes 2 days lol
@@ -216,8 +220,4 @@ if config.hyper_parameter_search:
     y_true, y_pred = test_label, grid.predict(test_data)
     log_hyperparameter_search(classification_report(y_true, y_pred))
     print()
-
-
-
-
 

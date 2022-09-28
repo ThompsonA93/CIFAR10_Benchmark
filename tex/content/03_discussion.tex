@@ -1,13 +1,12 @@
 \chapter{Discussion}
 The computation on the CIFAR10 dataset has produced various results, some of which were questionable due to overfitting issues. 
-Exemplary, a model was generated that recognized all pictures as Label '0' (see ConfusionMatrix\_Error.png in /log), despite being the most optimal setup during that computations context.
-As such, the many results show that a neural network is not necessarily optimal, even when utilizing hyperparameter evaluation on a given data structure. 
-Not only is the evaluation extremely costly in terms of time and power, but the resulting models may even perform less efficient than a single, well specified model. 
+Many results show that a neural network is not necessarily optimal, even when utilizing hyperparameter evaluation on a given data structure. 
+Not only is the evaluation extremely costly in terms of time and power, but the resulting models may even perform less efficiently than a single, well-specified model. 
 
-Over the many generations trained during this experimentation, the standard model did fairly well even compared to many optimal hypermodels.
-For hypermodels, Hyperband was the most consistent algorithm, with results often surpassing the standard model.
-In comparison, random search and bayesian optimization did, on average, worse than the standard model, while the implementation utilized by SKLearn performed about as well as the bayesian optimization.
+Over the many generations trained during this experimentation, the standard model did satisfactorily even compared to many optimal hyper models.
+For hyper models, Hyperband was the most consistent algorithm, with results often surpassing the standard model.
+On average, random search and bayesian optimization did worse than the standard model.
 
-In regards to parametrization, the models do not significantly improve after 4 to 8 epochs. 
-Hyperparameter evaluation further suggests, that reducing the amount of layers rather decreases scores.
-Utilizing different parametrization adds no significant improvements to neither execution time nor model accuracy.
+With respect to parametrization, most models do not significantly improve after 4 to 8 epochs. 
+Hyperparameter evaluation further suggests, that reducing the number of layers decreases overall scores, rather than improving them.
+Different parametrization, such as dropout and learning rate, can slightly improve accuracy.

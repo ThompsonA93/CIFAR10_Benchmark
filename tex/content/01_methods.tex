@@ -1,12 +1,7 @@
 \chapter{Methods and Resources}
-The datasets are imported from a remote destination with the use of the \href{https://keras.io/api/datasets/cifar10/}{keras.datasets} package.
-Beside additional utility libraries, such as \href{https://matplotlib.org/}{matplotlib} and \href{https://seaborn.pydata.org/}{seaborn} for displaying graphics, the \href{https://www.tensorflow.org/}{Tensorflow} library supplies the necessary algorithms for creating and executing neural network computations and hyperparameter evaluation.
-A secondary approach using \href{https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html}{SKLearn multi-layer perceptron} serves as additional reference in terms of computational performance and use. Notably, SKlearn implements \href{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html}{GridSearch} for parameter search.
+The datasets are downloaded from a remote destination using the \href{https://keras.io/api/datasets/cifar10/}{keras.datasets} package.
+Besides additional utility libraries, such as \href{https://matplotlib.org/}{matplotlib} and \href{https://seaborn.pydata.org/}{seaborn} for displaying graphics, the \href{https://www.tensorflow.org/}{Tensorflow} library supplies the necessary algorithms for creating and executing neural network computations and hyperparameter evaluation.
 
-\subsubsection{Approach}
-After the download of the CIFAR-10 data, it is required to perform some data transmutations on the set.
-The data values are normalized from the value range of (0..255) to (0..1), by simple division. 
-For the Keras computations, the training and test labels are categorized from a class vector of integers to a binary class matrix.
-SKLearn requires a distinct approach by reshaping the available data of the form (Images, X-Pixel, Y-Pixel, RGB-Channel) to (Images, \{X-Pixel, Y-Pixel, RGB-Channel\}).
-Optionally, the size of the used data is reduced in order to reduce the time necessary to run analytics.
-Afterwards, the main computation on the data commences.
+After downloading the CIFAR-10 dataset it is necessary to perform some data transmutations.
+The data values are normalized from the value range of (0..255) to (0..1) by simple division. Then training and test labels are categorized from a class vector of integers to a binary class matrix. Lastly, the amount of the data is reduced to decrease the time necessary to run analytics.
+Afterward, the computation commences.
